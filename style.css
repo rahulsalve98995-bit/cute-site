@@ -28,18 +28,41 @@ h1{
     font-size: 18px;
 }
 
-.button{
-    background: #ff6fae;
-    color: white;
-    padding: 15px 30px;
-    border: none;
-    border-radius: 30px;
-    font-size: 16px;
-    cursor: pointer;
-    text-decoration: none;
-    display: inline-block;
-
+.cute-btn {
+  background: linear-gradient(135deg, #ff9ec7, #ffc3d8);
+  border: none;
+  padding: 14px 36px;
+  border-radius: 40px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 18px;
+  box-shadow: 0 8px 20px rgba(255, 158, 199, 0.45);
+  transition: all 0.3s ease;
 }
+
+.cute-btn:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 12px 30px rgba(255, 158, 199, 0.6);
+}
+
+.cute-btn:active {
+  transform: scale(0.96);
+}
+
+/* optional cute pulse */
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(255,158,199,0.6); }
+  70% { box-shadow: 0 0 0 14px rgba(255,158,199,0); }
+  100% { box-shadow: 0 0 0 0 rgba(255,158,199,0); }
+}
+
+.cute-btn {
+  animation: pulse 2.5s infinite;
+}
+
+
 
 .button:hover{
     background: #ff7eb3
@@ -148,6 +171,7 @@ ul{
   position: relative;
   z-index: 2;
 }
+
 
 
 
