@@ -11,36 +11,54 @@
     <div class="rain-container"></div>
 
     <div class="container">
-        <h1>Hey you 🌷</h1>
-        <p class="subtitle">I made this little website just to make you smile.</p>
-<button onclick="showMessage()" class="cute-btn">
-  Continue 💖
-</button>
+        <div id="name-entry">
+            <h1>Locked for my favorite person 🔒</h1>
+            <p style="color: #888; margin-bottom: 20px; font-size: 14px;">Please confirm your identity to access.</p>
+            <input type="text" id="name-input" placeholder="Enter your name..." autofocus>
+            <button id="start-btn" class="cute-btn">Unlock 💖</button>
+        </div>
 
-<p style="font-size:12px;color:#999;">Made with a little smile 😊</p>
+        <div id="main-content" class="hidden">
+            <h1 id="greeting">Hey you 🌷</h1>
+            <p id="subtitle" class="subtitle">I made this little website just to make you smile.</p>
+            <button id="continue-btn" class="cute-btn">
+              Continue 💖
+            </button>
+
+            <p id="made-with" style="font-size:12px;color:#999;">Made with a little smile 😊</p>
+
+            <div id="game-container" class="hidden">
+                <h3 style="color: #555; margin-bottom: 10px;">Catch 5 hearts! 💖</h3>
+                <p id="score" style="font-size: 18px; color: #ff6fae; font-weight: bold;">0 / 5</p>
+            </div>
 
 
+            <div id="message" class="hidden">
+                <h2>Why you are special ✨</h2>
+                <ul>
+                    <li>Your vibe is just... different (in the best way)</li>
+                    <li>You have this way of lighting up a room</li>
+                    <li>Even your silence feels comfortable</li>
+                    <li>I find myself smiling just thinking about you</li>
+                    </ul>
+                    <p class="note">Words aren't enough, so I wrote some code instead 💗</p>
+                    <p class="final">Just a small reminder of how amazing you are 🌷</p>
+                    <p id="funny-note" class="final" style="font-size: 14px; color: #999; margin-top: 25px;"></p>
 
-<div id="message" class="hidden">
-    <h2>A few little things about you</h2>
-    <ul>
-        <li>Your smile feels peaceful</li>
-        <li>You make simple moments better</li>
-        <li>You have a very kind energy</li>
-        <li>Talking to you feels easy</li>
-        </ul>
-        <p class="note">I didn’t want to say everything in words,so I made something instead 💗
-        </p>
-        <p class="final">No expectations.  
-        Just something made with care 🌷</p>
-
-</div>
+                    <div id="puzzle-container" class="hidden">
+                        <p style="color: #888; margin-top: 25px;">A little puzzle for you...</p>
+                        <h3 id="scrambled-word" style="font-size: 28px; color: #ff9ec7; letter-spacing: 5px; margin: 15px 0;"></h3>
+                        <input type="text" id="puzzle-input" placeholder="Unscramble the word">
+                        <button id="puzzle-btn" class="cute-btn">Check</button>
+                        <p id="puzzle-feedback" style="color: #ff6b6b; margin-top: 10px; height: 15px;"></p>
+                        <button id="hint-btn" class="hidden" style="background: none; border: none; color: #aaa; font-size: 12px; cursor: pointer; margin-top: 10px; text-decoration: underline;">Need a hint?</button>
+                        <p id="hint-text" class="hidden" style="color: #ff9ec7; font-size: 14px; margin-top: 5px;"></p>
+                    </div>
+            </div>
+        </div>
  </div>
 
  <script src="script.js"></script>
     
 </body>
-
 </html>
-
-
