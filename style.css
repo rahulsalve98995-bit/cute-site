@@ -1,7 +1,15 @@
+@keyframes bg-animation {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
 body{
     margin: 0%;
     font-family: poppins, sans-serif;
-    background: #fff5f8;
+    background: linear-gradient(-45deg, #fff5f8, #ffebf2, #ffe3ec, #ffdbe6);
+    background-size: 400% 400%;
+    animation: bg-animation 15s ease infinite;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -11,15 +19,16 @@ body{
 .container{
     text-align: center;
     background: white;
-    padding: 40px;
+    padding: 50px 40px;
     border-radius: 20px;
     max-width: 420px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    position: relative; /* For game hearts positioning */
+    animation: fadeIn 1s ease-in-out, breathing 5s ease-in-out infinite;
 }
 h1{
     font-family: 'Playfair Display', serif;
-    color: #ff6fae
-    
+    color: #ff6fae;
 }
 
 .subtitle{
@@ -40,6 +49,7 @@ h1{
   margin-top: 18px;
   box-shadow: 0 8px 20px rgba(255, 158, 199, 0.45);
   transition: all 0.3s ease;
+  animation: pulse 2.5s infinite;
 }
 
 .cute-btn:hover {
@@ -58,16 +68,6 @@ h1{
   100% { box-shadow: 0 0 0 0 rgba(255,158,199,0); }
 }
 
-.cute-btn {
-  animation: pulse 2.5s infinite;
-}
-
-
-
-.button:hover{
-    background: #ff7eb3
-}
-
 .hidden{
     display: none;
 }
@@ -82,6 +82,31 @@ h1{
 ul{
     text-align: left;
     padding-left: 20px;
+    list-style: none;
+}
+
+ul li {
+    padding: 8px 0 8px 30px; /* Add padding for custom bullet */
+    position: relative;
+    /* Opacity will be handled by JS */
+}
+
+ul li::before {
+    content: '🌷'; /* You can change this to 💖 or 🌸 */
+    position: absolute;
+    left: 0;
+    top: 5px;
+    font-size: 18px;
+    color: #ff9ec7;
+}
+
+/* Blinking cursor for typewriter effect */
+.typing-cursor {
+    display: inline-block;
+    background-color: #888;
+    margin-left: 2px;
+    width: 3px;
+    animation: blink 1s infinite;
 }
 .note {
     margin-top: 20px;
@@ -94,10 +119,6 @@ ul{
     margin-top: 15px;
     font-style: italic;
 
-}
-
-.container {
-    animation: fadeIn 1s ease-in-out;
 }
 
 @keyframes fadeIn {
@@ -114,28 +135,56 @@ ul{
     to { opacity: 1; transform: translateY(0); }
 }
 
+@keyframes blink {
+    0%, 100% { background-color: #888; }
+    50% { background-color: transparent; }
+}
+
 @media (max-width: 600px) {
   body {
     padding: 20px;
+    min-height: 100vh;
     height: auto;
+    box-sizing: border-box;
   }
 
   .container {
-    padding: 25px;
-    border-radius: 15px;
+    padding: 30px 20px;
+    width: 100%;
+    box-sizing: border-box;
   }
 
   h1 {
-    font-size: 26px;
+    font-size: 24px;
   }
 
-  button {
+  .cute-btn {
     width: 100%;
-    font-size: 15px;
+    padding: 12px;
   }
 
   ul {
     padding-left: 15px;
+  }
+
+  #name-input {
+    width: 80%;
+    font-size: 20px;
+  }
+
+  #puzzle-input {
+    width: 100%;
+    font-size: 18px;
+    letter-spacing: 1px;
+    box-sizing: border-box;
+  }
+
+  .gift-box {
+    font-size: 60px;
+  }
+
+  .final-card {
+    padding: 15px;
   }
 }
 
@@ -172,6 +221,178 @@ ul{
   z-index: 2;
 }
 
+/* Sparkle Trail Effect */
+.sparkle {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999; /* Make sure it's on top of everything */
+  animation: sparkle-anim 0.8s ease-out forwards;
+  /* --x and --y will be set by JS */
+}
+
+@keyframes sparkle-anim {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--x), var(--y)) scale(0.5);
+  }
+}
+
+/* --- Love Game Styles --- */
+#game-container {
+    min-height: 150px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.game-heart {
+    position: absolute;
+    font-size: 45px;
+    cursor: pointer;
+    animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    user-select: none;
+    z-index: 10;
+}
+
+.game-heart:active {
+    transform: scale(0.8);
+}
+
+@keyframes popIn {
+    from { transform: scale(0); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+/* --- Name Entry Styles --- */
+#name-entry {
+    animation: popIn 0.5s;
+}
+
+#name-input {
+    width: 60%;
+    padding: 10px 0;
+    border: none;
+    border-bottom: 3px solid #ffc3d8;
+    background: transparent;
+    color: #ff6fae;
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: 20px;
+    margin-bottom: 25px;
+    transition: all 0.3s ease;
+}
+
+#name-input::placeholder {
+    color: #ffdbe6;
+    font-weight: normal;
+    font-size: 20px;
+}
+
+#name-input:focus {
+    outline: none;
+    border-bottom-color: #ff6fae;
+    transform: scale(1.05);
+}
 
 
+/* --- Chase the Heart Game --- */
+/* --- Puzzle Game Styles --- */
+#puzzle-container {
+    margin-top: 20px;
+    animation: popIn 0.5s;
+}
 
+#puzzle-input {
+    width: 70%;
+    padding: 15px;
+    border: 2px dashed #ff9ec7;
+    border-radius: 15px;
+    background: #fff5f8;
+    color: #ff6fae;
+    font-size: 20px;
+    text-align: center;
+    letter-spacing: 3px;
+    margin-top: 15px;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+}
+
+#puzzle-input:focus {
+    outline: none;
+    border-style: solid;
+    background: white;
+    box-shadow: 0 5px 15px rgba(255, 158, 199, 0.3);
+}
+
+#puzzle-btn {
+    margin-top: 15px;
+    width: auto; /* Override mobile style */
+    padding: 12px 30px;
+}
+
+/* Animation for wrong answer */
+@keyframes shake {
+  10%, 90% { transform: translate3d(-1px, 0, 0); }
+  20%, 80% { transform: translate3d(2px, 0, 0); }
+  30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+  40%, 60% { transform: translate3d(4px, 0, 0); }
+}
+
+.shake {
+    animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+/* Confetti Celebration */
+.confetti {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    z-index: 1000;
+    animation: fall-confetti 3s linear forwards;
+}
+
+@keyframes fall-confetti {
+    to { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+}
+
+@keyframes breathing {
+    0% { box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+    50% { box-shadow: 0 20px 50px rgba(255, 158, 199, 0.5); }
+    100% { box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+}
+
+/* --- Gift Box & Final Card --- */
+.gift-box {
+    font-size: 80px;
+    cursor: pointer;
+    animation: bounce 2s infinite;
+    margin-top: 30px;
+    margin-bottom: 20px;
+    transition: transform 0.3s;
+    user-select: none;
+}
+
+.gift-box:hover {
+    transform: scale(1.1) rotate(10deg);
+}
+
+.final-card {
+    background: #fff0f5;
+    padding: 30px;
+    border-radius: 20px;
+    border: 3px dashed #ffc3d8;
+    animation: popIn 0.8s;
+    box-shadow: 0 10px 30px rgba(255, 158, 199, 0.2);
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+    40% {transform: translateY(-20px);}
+    60% {transform: translateY(-10px);}
+}
