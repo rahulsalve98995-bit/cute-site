@@ -3,25 +3,32 @@
 // --- Rain Effect ---
 document.addEventListener('DOMContentLoaded', () => {
     const rainContainer = document.querySelector('.rain-container');
-    const items = ['💖', '🌸', '🌷', '✨', '💕'];
-    const itemCount = 50; // Number of items
+    
+    const createRain = (isDark) => {
+        rainContainer.innerHTML = ''; // Clear existing rain
+        const items = isDark ? ['⭐', '✨', '🌙', '💫', '🌌'] : ['💖', '🌸', '🌷', '✨', '💕'];
+        const itemCount = 50;
 
-    for (let i = 0; i < itemCount; i++) {
-        const rainItem = document.createElement('div');
-        rainItem.classList.add('rain-item');
-        rainItem.innerText = items[Math.floor(Math.random() * items.length)];
-        
-        // Randomize properties
-        rainItem.style.left = `${Math.random() * 100}vw`;
-        rainItem.style.fontSize = `${Math.random() * 12 + 12}px`; // 12px to 24px
-        rainItem.style.opacity = Math.random() * 0.5 + 0.3; // 0.3 to 0.8
-        
-        const animationDuration = Math.random() * 5 + 5; // 5s to 10s
-        rainItem.style.animationDuration = `${animationDuration}s`;
-        rainItem.style.animationDelay = `${Math.random() * 5}s`;
+        for (let i = 0; i < itemCount; i++) {
+            const rainItem = document.createElement('div');
+            rainItem.classList.add('rain-item');
+            rainItem.innerText = items[Math.floor(Math.random() * items.length)];
+            
+            // Randomize properties
+            rainItem.style.left = `${Math.random() * 100}vw`;
+            rainItem.style.fontSize = `${Math.random() * 12 + 12}px`; 
+            rainItem.style.opacity = Math.random() * 0.5 + 0.3; 
+            
+            const animationDuration = Math.random() * 5 + 5; 
+            rainItem.style.animationDuration = `${animationDuration}s`;
+            rainItem.style.animationDelay = `${Math.random() * 5}s`;
 
-        rainContainer.appendChild(rainItem);
-    }
+            rainContainer.appendChild(rainItem);
+        }
+    };
+
+    // Initial rain (Light mode)
+    createRain(false);
 
     // --- Name Entry Logic ---
     const startBtn = document.getElementById('start-btn');
@@ -49,6 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
             mainContent.classList.remove('hidden');
         } else {
             // Wrong name effect
+            if (navigator.vibrate) navigator.vibrate(200); // Vibrate on mobile
             nameInput.classList.add('shake');
             nameInput.style.borderBottomColor = "#ff6b6b";
             setTimeout(() => {
@@ -108,6 +116,19 @@ document.addEventListener('DOMContentLoaded', () => {
         if(e.touches.length > 0) {
             spawnSparkle(e.touches[0].clientX, e.touches[0].clientY);
         }
+    });
+
+    // --- Dark Mode Toggle ---
+    const themeToggle = document.getElementById('theme-toggle');
+    let isDarkMode = false;
+
+    themeToggle.addEventListener('click', () => {
+        isDarkMode = !isDarkMode;
+        document.body.classList.toggle('dark-mode');
+        
+        // Update icon and rain
+        themeToggle.innerText = isDarkMode ? '☀️' : '🌙';
+        createRain(isDarkMode);
     });
 });
 
@@ -224,15 +245,15 @@ async function showMessage() {
 
     // Get list items and type them out
     const listItems = messageDiv.querySelectorAll('ul li');
-    for (const item of listItems) {
-        const text = item.textContent;
-        item.textContent = ''; // Clear the item before typing
-        await typeWriter(item, text, 50);
-        await wait(200); // Small pause between items
-    }
+    listItems.forEach((item, index) => {
+        item.style.animation = `slideInItem 0.6s ease-out forwards`;
+        item.style.animationDelay = `${0.5 + index * 0.25}s`;
+    });
+
+    // Wait for the list animation to roughly finish before proceeding
+    await wait(800 + listItems.length * 250);
 
     // Fade in the final notes
-    await wait(500);
     [note, final].forEach(el => {
         el.style.transition = 'opacity 1s';
         el.style.opacity = 1;
@@ -290,16 +311,28 @@ async function showMessage() {
             
             const hint = document.createElement('p');
             hint.innerText = "(Tap to open)";
-            hint.style.color = "#aaa";
             hint.style.fontSize = "14px";
             container.appendChild(hint);
 
             giftBox.addEventListener('click', () => {
                 celebrate(); // Trigger confetti
                 // Show the final card
-                container.innerHTML = `<div class="final-card"><h2 style="color: #ff6fae; margin-bottom: 15px;">Exactly! ✨</h2><p style="font-size: 18px; color: #555; line-height: 1.6;">That is exactly what you are to me.</p><p style="font-size: 20px; color: #ff6fae; font-weight: bold; margin-top: 15px;">Special. Important. Loved.</p><div style="font-size: 50px; margin-top: 20px; animation: pulse 2s infinite;">💖</div><p style="font-size: 12px; color: #aaa; margin-top: 25px;">(Take a screenshot and send it to me? 📸)</p></div>`;
+                container.innerHTML = `
+                    <div class="final-card" id="final-card">
+                        <h2 style="color: #ff6fae; margin-bottom: 15px;">Exactly! ✨</h2>
+                        <p style="font-size: 18px; line-height: 1.6;">That is exactly what you are to me.</p>
+                        <p style="font-size: 20px; color: #ff6fae; font-weight: bold; margin-top: 15px;">Special. Important. Loved.</p>
+                        <div style="font-size: 50px; margin-top: 20px; animation: pulse 2s infinite;">💖</div>
+                        <p id="screenshot-hint" style="font-size: 12px; margin-top: 25px;">(Take a screenshot and send it to me? 📸)</p>
+                        <button id="replay-btn" class="cute-btn" style="margin-top: 20px; font-size: 14px; padding: 10px 20px;">Watch Again ↺</button>
+                    </div>`;
+                
+                document.getElementById('replay-btn').addEventListener('click', () => {
+                    location.reload();
+                });
             });
         } else {
+            if (navigator.vibrate) navigator.vibrate(200); // Vibrate on mobile
             puzzleFeedback.innerText = "Not quite, try again!";
             puzzleInput.classList.add('shake');
             puzzleInput.value = ""; // Clear the wrong answer
